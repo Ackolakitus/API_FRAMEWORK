@@ -15,29 +15,27 @@ export class MetergramClient extends BaseClient {
     private Token: string;
     private name: string;
     private job: string;
+    private email: string;
+    private password: string;
 
-    private postAuthRequestBody: PostAuthRequestBody = {
-        email: "eve.holt@reqres.in",
-        password: "pistol"
-    };
+    private postAuthRequestBody: PostAuthRequestBody;
 
 
-    constructor(name: string, job: string) {
+    constructor(email: string, password: string, name: string = null, job: string = null) {
         super();
         this.baseUrl = HOSTNAME;
-        this.authenticate();
+        this.email = email;
+        this.password = password;
         this.name = name;
         this.job = job;
-
-        // const responseEntity: ResponseEntity<PostAuthResponseBody> = this.authenticateOnTheSite(this.postAuthRequestBody);
-        // this.Token = responseEntity.data.token;
-        // this.addHeader("Content-Type", "application/json");
-        // console.log(this.Token)
+        
+        this.postAuthRequestBody = {
+            email: this.email,
+            password: this.password
+        };
+        this.authenticate();
     }
 
-    public authenticateOnTheSite(postAuthRequestBody: PostAuthRequestBody): ResponseEntity<PostAuthResponseBody> {
-        return this.post(MetergramClient.authenticate, postAuthRequestBody);
-    }
     private async authenticate(){
         const responseEntity: ResponseEntity<PostAuthResponseBody> =  await this.register();
         this.Token = responseEntity.data.token;

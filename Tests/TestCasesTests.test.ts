@@ -2,14 +2,12 @@ import { GetUserResponseBody } from '../model/get/GetUserResponseBody';
 import { MetergramClient } from "../http/MetergramClient";
 import {describe, expect, test} from '@jest/globals';
 import { GetListUsersResponseBody } from '../model/get/GetListUsersResponseBody';
-import { PostAuthResponseBody } from '../model/post/PostAuthResponseBody';
-
 
 describe('TestCasesTests', () => {
     let metergramClient: MetergramClient;
     
     beforeEach(() => {
-        metergramClient = new MetergramClient();
+        metergramClient = new MetergramClient("eve.holt@reqres.in", "pistol");
     });
     
     test('RegisterEndpoint', async () => { })
