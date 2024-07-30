@@ -7,10 +7,12 @@ import { PostAuthResponseBody } from '../model/post/PostAuthResponseBody';
 
 describe('TestCasesTests', () => {
     let metergramClient: MetergramClient;
-
+    
     beforeEach(() => {
         metergramClient = new MetergramClient();
     });
+    
+    test('RegisterEndpoint', async () => { })
 
     test('GetUserByID', async () => {
         const responseEntity = await metergramClient.getUserById(3);
@@ -53,17 +55,17 @@ describe('TestCasesTests', () => {
     })
 
     test('PostCreateUser', async ()=>{
-        const name = "Aleksandar";
-        const job = "QA intern";
+        metergramClient.setName("Aleksandar");
+        metergramClient.setJob("QA intern");
 
-        const responseEntity = await metergramClient.createUser(name, job);
+        const responseEntity = await metergramClient.createUser();
         // console.log(responseEntity);
 
         expect(responseEntity.status).toEqual(201);
         expect(responseEntity.statusText).toEqual('Created');
 
-        expect(responseEntity.data.name).toEqual(name);
-        expect(responseEntity.data.job).toEqual(job);
+        expect(responseEntity.data.name).toEqual("Aleksandar");
+        expect(responseEntity.data.job).toEqual("QA intern");
     })
 
     test('Delete10thUser', async () => {
@@ -73,7 +75,4 @@ describe('TestCasesTests', () => {
         expect(responseEntity.statusText).toEqual('No Content');
     })
 
-    test.only('RegisterEndpoint', async () => {
-    
-    })
 });

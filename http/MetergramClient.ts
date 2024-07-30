@@ -13,6 +13,8 @@ import { PostAuthRequestBody } from "../model/post/PostAuthRequestBody";
 export class MetergramClient extends BaseClient {
     private static readonly authenticate = "register";
     private Token: string;
+    private name: string;
+    private job: string;
 
     private postAuthRequestBody: PostAuthRequestBody = {
         email: "eve.holt@reqres.in",
@@ -20,30 +22,30 @@ export class MetergramClient extends BaseClient {
     };
 
 
-    constructor() {
+    constructor(name: string, job: string) {
         super();
         this.baseUrl = HOSTNAME;
-        // this.authenticate();
+        this.authenticate();
+        this.name = name;
+        this.job = job;
+
+        // const responseEntity: ResponseEntity<PostAuthResponseBody> = this.authenticateOnTheSite(this.postAuthRequestBody);
+        // this.Token = responseEntity.data.token;
+        // this.addHeader("Content-Type", "application/json");
         // console.log(this.Token)
-        
-        /* Komentiraj gi ovie, unkomentiranj se sto e komentirano */
-        const responseEntity: ResponseEntity<PostAuthResponseBody> = this.authenticateOnTheSite(this.postAuthRequestBody);
-        this.Token = responseEntity.data.token;
-        this.addHeader("Content-Type", "application/json");
-        console.log(this.Token)
     }
 
     public authenticateOnTheSite(postAuthRequestBody: PostAuthRequestBody): ResponseEntity<PostAuthResponseBody> {
         return this.post(MetergramClient.authenticate, postAuthRequestBody);
     }
-    // private async authenticate(){
-    //     const responseEntity: ResponseEntity<PostAuthResponseBody> =  await this.register();
-    //     this.Token = responseEntity.data.token;
-    //     // console.log(this.Token)
-    // }
-    // private register(): ResponseEntity<PostAuthResponseBody>{
-    //     return this.post("register", this.postAuthRequestBody);
-    // }
+    private async authenticate(){
+        const responseEntity: ResponseEntity<PostAuthResponseBody> =  await this.register();
+        this.Token = responseEntity.data.token;
+        // console.log(this.Token)
+    }
+    private register(): ResponseEntity<PostAuthResponseBody>{
+        return this.post("register", this.postAuthRequestBody);
+    }
 
     public getUserById(id: number): ResponseEntity<GetUserResponseBody> {
         return this.get( "users/" + id);
@@ -64,10 +66,10 @@ export class MetergramClient extends BaseClient {
         return this.get(query);
     }
 
-    public createUser(name: string, job: string): ResponseEntity<PostCreateUserResponseBody>{
+    public createUser(): ResponseEntity<PostCreateUserResponseBody>{
         const body: PostCreateUserRequestBody = {
-            name: name,
-            job: job
+            name: this.name,
+            job: this.job
         }
 
         return this.post("users", body);
@@ -75,5 +77,20 @@ export class MetergramClient extends BaseClient {
 
     public deleteUser(id: number){
         return this.delete( "users/" + id);
+    }
+
+    public setName(name: string){
+        this.name = name;
+    }
+    public setJob(job: string){
+        this.job = job;
+    }
+
+    public getName(){
+        return this.name;
+    }
+
+    public getJob(){
+        return this.job;
     }
 }
